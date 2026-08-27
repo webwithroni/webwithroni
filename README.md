@@ -308,6 +308,14 @@ The goal is simple:
 
 ---
 
+## ⚡ Roni Pulse — Live Repository Health
+
+[![Roni Pulse](https://github.com/webwithroni/webwithroni/actions/workflows/pulse.yml/badge.svg)](https://github.com/webwithroni/webwithroni/actions/workflows/pulse.yml)
+
+> Automated health snapshot of the projects I build and maintain.
+
+**[View live repository pulse →](./data/repo-health.md)**
+
 ## 📊 GitHub Activity
 
 <div align="center">

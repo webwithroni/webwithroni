@@ -1,0 +1,47 @@
+name: Roni Pulse
+
+on:
+  schedule:
+    - cron: "0 18 * * *"
+      timezone: "Asia/Kolkata"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: roni-pulse
+  cancel-in-progress: true
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Generate health report
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python scripts/pulse.py
+
+      - name: Commit changed report
+        run: |
+          if git diff --quiet -- data/repo-health.md; then
+            echo "No meaningful repository-state change."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/repo-health.md
+          git commit -m "chore: refresh repository pulse"
+          git push
